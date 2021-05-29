@@ -1,25 +1,44 @@
+#ifndef JOS_KERN_IP_H
+#define JOS_KERN_IP_H
+
+#include <inc/types.h>
+#include <kern/e1000.h>
+
 struct ip_hdr {
-    uint8_t    ip_verlen;        // 4-bit IPv4 version 4-bit header length (in 32-bit words)
-    uint8_t    ip_tos;           // IP type of service
-    uint16_t   ip_totallength;   // Total length
-    uint16_t   ip_id;            // Unique identifier
-    uint16_t   ip_offset;        // Fragment offset field
-    uint8_t    ip_ttl;           // Time to live
-    uint8_t    ip_protocol;      // Protocol(TCP,UDP etc)
-    uint16_t   ip_checksum;      // IP checksum
-    uint32_t   ip_srcaddr;       // Source address
-    uint32_t   ip_destaddr;      // Source address
-}  __attribute__((packed));
+    uint8_t ip_verlen;       // 4-bit IPv4 version 4-bit header length (in 32-bit words)
+    uint8_t ip_tos;          // IP type of service
+    uint16_t ip_totallength; // Total length
+    uint16_t ip_id;          // Unique identifier
+    uint16_t ip_offset;      // Fragment offset field
+    uint8_t ip_ttl;          // Time to live
+    uint8_t ip_protocol;     // Protocol(TCP,UDP etc)
+    uint16_t ip_checksum;    // IP checksum
+    uint32_t ip_srcaddr;     // Source address
+    uint32_t ip_destaddr;    // Source address
+} __attribute__((packed));
 
 
-int ip_send(const char* buf, size_t size, uint32_t *src, uint32_t *dest, uint8_t ttl, uint8_t tos, uint8_t proto);
+#define MTU           1500 // tmp magic
+#define IP_HEADER_LEN sizeof(struct ip_hdr)
+#define IP_DATA_LEN   (MTU - IP_HEADER_LEN)
 
+struct ip_pkt {
+    struct ip_hdr hdr;
+    uint8_t data[IP_DATA_LEN];
+};
 
+uint16_t ip_checksum(void* vdata, size_t length);
+int ip_send(struct ip_pkt* pkt);
+int ip_recv(struct ip_pkt* pkt);
 
+#define IP_VER_LEN 0x45
+#define IP_TTL      10
 
 #define IPH_V(hdr)  ((hdr)->ip_verlen & 0xf)
 #define IPH_HL(hdr) (((hdr)->ip_verlen >> 4) & 0x0f)
 
-#define IP_PROTO_ICMP    1
-#define IP_PROTO_UDP     17
-#define IP_PROTO_TCP     6
+#define IP_PROTO_ICMP 1
+#define IP_PROTO_UDP  17
+#define IP_PROTO_TCP  6
+
+#endif /* !JOS_KERN_IP_H */

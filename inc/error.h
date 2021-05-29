@@ -28,8 +28,10 @@ enum {
     E_NOT_EXEC = 18,    /* File not a valid executable */
     E_NOT_SUPP = 19,    /* Operation not supported */
 
-    E_NIC_BUSY = 20,    /* NIC is busy processing other packets*/
-    E_RX_EMPTY = 21,    /* NIC is busy processing other packets*/
+    E_NIC_BUSY = 20, /* NIC is busy processing other packets */
+    E_RX_EMPTY = 21, /* Nothint to recevive */
+    E_UNS_VER = 22, /* Unsupported version of IP */
+    E_INV_CHS = 23, /* Invalid checksum */
     MAXERROR
 };
 
