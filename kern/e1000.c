@@ -48,7 +48,7 @@ int e1000_attach(struct pci_func *pcif)
 	// Transmit Initialization
     void *t_desc = kzalloc_region(TX_QUEUE_SIZE * sizeof(struct e1000_tx_desc));
 
-	NIC_REG(E1000_TDBAL) = PADDR(t_desc);
+	NIC_REG(E1000_TDBAL) = va2pa((uintptr_t)t_desc);
 	NIC_REG(E1000_TDBAH) = 0;
 	NIC_REG(E1000_TDLEN) = TX_QUEUE_SIZE * sizeof(struct e1000_tx_desc);
 	tx_queue_desc = t_desc;
@@ -78,7 +78,7 @@ int e1000_attach(struct pci_func *pcif)
 	// Allocate memory for the receive descriptor list & init registers
     void *r_desc = kzalloc_region(RX_QUEUE_SIZE * sizeof(struct e1000_tx_desc));
 	rx_queue_desc = r_desc;
-	NIC_REG(E1000_RDBAL) = PADDR(r_desc);
+	NIC_REG(E1000_RDBAL) = va2pa((uintptr_t)r_desc);
 	NIC_REG(E1000_RDBAH) = 0;
 	NIC_REG(E1000_RDLEN) = RX_QUEUE_SIZE * sizeof(struct e1000_rx_desc);
 
