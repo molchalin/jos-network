@@ -44,14 +44,15 @@ ip_send(struct ip_pkt* pkt, uint16_t length) {
     hdr->ip_tos = 0;
     hdr->ip_totallength = htons((length + IP_HEADER_LEN) / sizeof(uint8_t));
     hdr->ip_id = htons(id);
-    hdr->ip_offset = 0; // TODO fragmentation 
+    hdr->ip_offset = 0; // TODO fragmentation
     hdr->ip_ttl = IP_TTL;
 
-    hdr->ip_checksum = ip_checksum((void *)pkt, IP_HEADER_LEN);
-    return tx_packet((void *)pkt, sizeof(*pkt));
+    hdr->ip_checksum = ip_checksum((void*)pkt, IP_HEADER_LEN);
+    return tx_packet((void*)pkt, sizeof(*pkt));
 }
 
-int ip_recv(struct ip_pkt* pkt) {
+int
+ip_recv(struct ip_pkt* pkt) {
     int res = rx_packet((void*)pkt, sizeof(*pkt));
     if (res < 0) {
         return res;
@@ -67,5 +68,3 @@ int ip_recv(struct ip_pkt* pkt) {
     }
     return 0;
 }
-
-

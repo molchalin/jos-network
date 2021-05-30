@@ -30,8 +30,8 @@ enum {
 
     E_NIC_BUSY = 20, /* NIC is busy processing other packets */
     E_RX_EMPTY = 21, /* Nothint to recevive */
-    E_UNS_VER = 22, /* Unsupported version of IP */
-    E_INV_CHS = 23, /* Invalid checksum */
+    E_UNS_VER = 22,  /* Unsupported version of IP */
+    E_INV_CHS = 23,  /* Invalid checksum */
     MAXERROR
 };
 

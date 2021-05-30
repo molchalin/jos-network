@@ -33,9 +33,9 @@ int ip_recv(struct ip_pkt* pkt);
 
 #define IP_VER 0x4
 //#define IP_HLEN 0x05
-#define IP_HLEN (IP_HEADER_LEN / sizeof(uint8_t))
+#define IP_HLEN    (IP_HEADER_LEN / sizeof(uint8_t))
 #define IP_VER_LEN (IP_VER | IP_HLEN)
-#define IP_TTL      10
+#define IP_TTL     10
 
 #define IPH_V(hdr)  ((hdr)->ip_verlen & 0xf)
 #define IPH_HL(hdr) (((hdr)->ip_verlen >> 4) & 0x0f)
