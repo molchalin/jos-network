@@ -30,19 +30,24 @@ ip_checksum(void* vdata, size_t length) {
     return htons(~acc);
 }
 
+/*
+ * pkt - ip packet
+ * length - size of data in pkt in bytes
+*/
+
 int
-ip_send(struct ip_pkt* pkt) {
+ip_send(struct ip_pkt* pkt, uint16_t length) {
     uint16_t id = packet_id++;
 
     struct ip_hdr* hdr = &pkt->hdr;
     hdr->ip_verlen = IP_VER_LEN;
     hdr->ip_tos = 0;
-    hdr->ip_totallength = 0;
-    hdr->ip_id = id;
-    hdr->ip_offset = 0;
+    hdr->ip_totallength = htons((length + IP_HEADER_LEN) / sizeof(uint8_t));
+    hdr->ip_id = htons(id);
+    hdr->ip_offset = 0; // TODO fragmentation 
     hdr->ip_ttl = IP_TTL;
 
-    hdr->ip_checksum = ip_checksum((void *)pkt, sizeof(*pkt));
+    hdr->ip_checksum = ip_checksum((void *)pkt, IP_HEADER_LEN);
     return tx_packet((void *)pkt, sizeof(*pkt));
 }
 
@@ -57,7 +62,7 @@ int ip_recv(struct ip_pkt* pkt) {
     }
     uint16_t checksum = hdr->ip_checksum;
     hdr->ip_checksum = 0;
-    if (checksum != ip_checksum((void*)pkt, sizeof(*pkt))) {
+    if (checksum != ip_checksum((void*)pkt, IP_HEADER_LEN)) {
         return -E_INV_CHS;
     }
     return 0;
