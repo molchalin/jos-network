@@ -3,15 +3,7 @@
 
 #include <inc/types.h>
 
-enum tcp_state {
-    CSTATE_ESTABLISHED,
-    SYN_SENT,
-    SYN_RECEIVED,
-    SYN_ACK_RECEIVED,
-    SYN_ACK_SENT,
-    CSTATE_CLOSED,
-    FIN_SENT,
-};
+
 
 struct tcp_hdr {
     uint16_t th_sport;  /* source port */
@@ -25,6 +17,51 @@ struct tcp_hdr {
     uint16_t th_sum;    /* checksum */
     uint16_t th_urp;    /* urgent pointer (unused in STCP) */
 } __attribute__((packed));
+
+#define TCP_DATA_LENGTH 1024
+#define TCP_HEADER_LENGTH sizeof(struct tcp_hdr)
+
+struct tcp_pkt {
+    struct tcp_hdr hdr;
+    uint8_t data[TCP_DATA_LENGTH];
+} __attribute__((packed));
+
+struct tcp_endpoint {
+    uint32_t ip;
+    uint16_t port;
+};
+
+enum tcp_state {
+    CSTATE_ESTABLISHED,
+    SYN_SENT,
+    SYN_RECEIVED,
+    SYN_ACK_RECEIVED,
+    SYN_ACK_SENT,
+    CSTATE_CLOSED,
+    FIN_SENT,
+};
+struct tcp_context {
+    enum tcp_state state;
+    struct tcp_endpoint tcp_local;
+    struct tcp_endpoint tcp_foreign;
+};
+
+#define TCP_CXT_LEN 32
+struct tcp_context tcp_ctx[TCP_CXT_LEN];
+
+/* syscalls wrapper from user space */
+int tcp_create(uint32_t* socket);
+int tcp_bind(uint32_t soket, struct tcp_endpoint* endpoint);
+int tcp_connect(uint32_t socket, struct tcp_endpoint* endpoint);
+
+int tcp_write(uint32_t socket, uint8_t* data, size_t lenght);
+int tcp_read(uint32_t soket, uint8_t* data);
+
+/* to network serve */
+int tcp_send(struct tcp_context* ctx, struct tcp_pkt* pkt, size_t length);
+int tcp_recv(struct ip_pkt* recv_ip, struct tcp_pkt* pkt);
+
+void serve();
 
 #define TH_FIN  0x01
 #define TH_SYN  0x02
