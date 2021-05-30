@@ -69,7 +69,7 @@ e1000_attach(struct pci_func *pcif) {
 
     // Receive initialization
     // MAC address 52:54:00:12:34:56
-    NIC_REG(E1000_RAL) = 0x12005452;
+    NIC_REG(E1000_RAL) = QEMU_MAC;
     *(uint16_t *)&NIC_REG(E1000_RAH) = 0x5634;
     NIC_REG(E1000_RAH) |= E1000_RAH_AV; // set the address valid bit
     // MTA initialized to 0b
