@@ -40,6 +40,18 @@ enum tcp_state {
     CSTATE_CLOSED,
     FIN_SENT,
 };
+
+struct tcp_block {
+    uint32_t snd_uno;
+    uint32_t snd_nxt;
+    uint32_t snd_wnd;
+    uint32_t iss;
+
+    uint32_t rcv_nxt;
+    uint32_t rcv_wnd;
+    uint32_t irs;
+};
+
 struct tcp_context {
     enum tcp_state state;
     struct tcp_endpoint tcp_local;
