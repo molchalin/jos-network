@@ -4,6 +4,8 @@
 
 #define ETH_MAX_PACKET_SIZE     1518
 #define DATA_PACKET_BUFFER_SIZE 2048
+#define QEMU_MAC                0x12005452
+
 
 int e1000_attach(struct pci_func *pcif);
 int tx_packet(char *buf, int size);
