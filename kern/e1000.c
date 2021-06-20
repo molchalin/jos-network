@@ -102,7 +102,7 @@ tx_packet(char *buf, int size) {
         return -E_NIC_BUSY; // queue is full
     }
     tx_queue_desc[tail_indx].status &= ~E1000_TXD_STAT_DD;
-    memmove(&tx_queue_data[tail_indx].data, buf, size);
+    memcpy(&tx_queue_data[tail_indx].data, buf, size);
     tx_queue_desc[tail_indx].length = size;
     // update the TDT to "submit" this packet for transmission
     NIC_REG(E1000_TDT) = (tail_indx + 1) % TX_QUEUE_SIZE;
@@ -117,7 +117,7 @@ rx_packet(char *buf, int size) {
     }
     rx_queue_desc[next_indx].status &= ~E1000_TXD_STAT_DD;
     int rx_size = MIN(rx_queue_desc[next_indx].length, size);
-    memmove(buf, rx_queue_data[next_indx].data, rx_size);
+    memcpy(buf, rx_queue_data[next_indx].data, rx_size);
     NIC_REG(E1000_RDT) = next_indx;
     return rx_size;
 }
