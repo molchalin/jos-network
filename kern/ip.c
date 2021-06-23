@@ -2,6 +2,7 @@
 #include <inc/string.h>
 #include <kern/inet.h>
 #include <inc/error.h>
+#include <kern/tcp.h>
 
 uint16_t packet_id = 0;
 
@@ -65,6 +66,9 @@ ip_recv(struct ip_pkt* pkt) {
     hdr->ip_checksum = 0;
     if (checksum != ip_checksum((void*)pkt, IP_HEADER_LEN)) {
         return -E_INV_CHS;
+    }
+    if (hdr->ip_protocol == IP_PROTO_TCP) {
+        tcp_recv(pkt);
     }
     return 0;
 }

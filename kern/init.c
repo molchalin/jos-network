@@ -19,6 +19,7 @@
 #include <kern/kdebug.h>
 #include <kern/traceopt.h>
 #include <kern/pci.h>
+#include <kern/net.h>
 
 void
 timers_init(void) {
@@ -159,8 +160,10 @@ i386_init(void) {
     timers_schedule("hpet0");
     clock_idt_init();
     pci_init();
+    net_init();
 
 
+    //ENV_CREATE(user_hello, ENV_TYPE_USER);
 #ifdef CONFIG_KSPACE
     /* Touch all you want */
     //ENV_CREATE_KERNEL_TYPE(prog_test1);
@@ -169,6 +172,8 @@ i386_init(void) {
     //ENV_CREATE_KERNEL_TYPE(prog_test4);
     //ENV_CREATE_KERNEL_TYPE(prog_test5);
     //ENV_CREATE_KERNEL_TYPE(prog_test6);
+    //
+    //ENV_CREATE(user_hello, ENV_TYPE_USER);
 #else
 
 #if LAB >= 10
@@ -183,6 +188,7 @@ i386_init(void) {
     ENV_CREATE(user_icode, ENV_TYPE_USER);
 #endif /* TEST* */
 #endif
+
 
     /* Should not be necessary - drains keyboard because interrupt has given up. */
     kbd_intr();

@@ -5,15 +5,14 @@
 #include <kern/ip.h>
 
 
-
 struct tcp_hdr {
-    uint16_t th_sport;  /* source port */
-    uint16_t th_dport;  /* destination port */
-    uint32_t th_seq;    /* sequence number */
-    uint32_t th_ack;    /* acknowledgement number */
+    uint16_t th_sport;      /* source port */
+    uint16_t th_dport;      /* destination port */
+    uint32_t th_seq;        /* sequence number */
+    uint32_t th_ack;        /* acknowledgement number */
     uint8_t th_off : 4;     /* data offset */
     uint8_t th_reserve : 4; /* unused */
-    uint8_t fin : 1, /* tcp flags */
+    uint8_t fin : 1,        /* tcp flags */
             syn : 1,
             rst : 1,
             psh : 1,
@@ -21,14 +20,14 @@ struct tcp_hdr {
             urg : 1,
             ece : 1,
             cwr : 1;
-    uint16_t th_win;    /* window */
-    uint16_t th_sum;    /* checksum */
-    uint16_t th_urp;    /* urgent pointer (unused in STCP) */
+    uint16_t th_win; /* window */
+    uint16_t th_sum; /* checksum */
+    uint16_t th_urp; /* urgent pointer (unused in STCP) */
 } __attribute__((packed));
 
-#define TCP_DATA_LENGTH 1024
+#define TCP_DATA_LENGTH   1024
 #define TCP_HEADER_LENGTH sizeof(struct tcp_hdr)
-#define TCP_WIN_SIZE (1 << 10)
+#define TCP_WIN_SIZE      (1 << 10)
 
 struct tcp_pkt {
     struct tcp_hdr hdr;
@@ -79,6 +78,7 @@ int tcp_write(uint32_t socket, uint8_t* data, size_t lenght);
 int tcp_read(uint32_t soket, uint8_t* data);
 
 /* to network serve */
+void tcp_init();
 int tcp_send(struct tcp_context* ctx, struct tcp_pkt* pkt, size_t length);
 int tcp_recv(struct ip_pkt* recv_ip);
 

@@ -3,7 +3,8 @@
 #define RECV_NUM 10
 #define SEND_NUM 10
 
-void serve() {
+void
+serve() {
     int res = 0;
     for (size_t i = 0; i < RECV_NUM; ++i) {
         struct ip_pkt recv_ip;
@@ -20,6 +21,3 @@ void serve() {
         }
     }
 }
-
-
-

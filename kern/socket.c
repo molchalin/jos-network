@@ -5,7 +5,8 @@
 struct socket* freep = NULL;
 struct socket sockets[SOCKET_NUM];
 
-int create_socket(envid_t env, int protocol) {
+int
+create_socket(envid_t env, int protocol) {
     for (size_t i = 0; i < SOCKET_NUM; ++i) {
         if (sockets[i].state == SS_FREE) {
             sockets[i].state = SS_CONNECTING;
@@ -18,7 +19,8 @@ int create_socket(envid_t env, int protocol) {
     return -1;
 }
 
-int bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
+int
+bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
     if (socket >= SOCKET_NUM) {
         return -1;
     }
@@ -36,4 +38,3 @@ int bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
     }
     return res;
 }
-

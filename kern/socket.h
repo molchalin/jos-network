@@ -5,13 +5,12 @@
 #include <inc/env.h>
 
 
-
 enum socket_state {
-    SS_FREE = 0, /* not allocated                */
-    SS_UNCONNECTED,                 /* unconnected to any socket    */
-    SS_CONNECTING,                  /* in process of connecting     */
-    SS_CONNECTED,                   /* connected to socket          */
-    SS_DISCONNECTING                /* in process of disconnecting  */
+    SS_FREE = 0,     /* not allocated                */
+    SS_UNCONNECTED,  /* unconnected to any socket    */
+    SS_CONNECTING,   /* in process of connecting     */
+    SS_CONNECTED,    /* connected to socket          */
+    SS_DISCONNECTING /* in process of disconnecting  */
 };
 
 enum socket_protocol {

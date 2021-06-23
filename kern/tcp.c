@@ -5,13 +5,15 @@
 
 // internal begin
 
-uint32_t _get_isn() {
+uint32_t
+_get_isn() {
     static uint32_t isn = 42;
     isn = (isn << 2) + 42;
     return isn;
 }
 
-int _tcp_send_syn_ack(struct tcp_context* ctx) {
+int
+_tcp_send_syn_ack(struct tcp_context* ctx) {
     struct tcp_pkt result;
     struct tcp_hdr* hdr = &result.hdr;
     hdr->th_sport = ctx->tcp_local.port;
@@ -27,7 +29,8 @@ int _tcp_send_syn_ack(struct tcp_context* ctx) {
     return tcp_send(ctx, &result, 0);
 }
 
-int _tcp_listen(struct tcp_context* ctx, struct tcp_pkt* pkt) {
+int
+_tcp_listen(struct tcp_context* ctx, struct tcp_pkt* pkt) {
     struct tcp_hdr* hdr = &pkt->hdr;
     if (hdr->syn) {
         ctx->tcp_block.ack = hdr->th_seq + 1;
@@ -38,16 +41,16 @@ int _tcp_listen(struct tcp_context* ctx, struct tcp_pkt* pkt) {
 }
 
 
-
-
 // internal end
 
 
-int tcp_create(uint32_t* socket) {
+int
+tcp_create(uint32_t* socket) {
     return 0;
 }
 
-int tcp_bind(uint32_t socket, uint32_t ip, uint16_t port) {
+int
+tcp_bind(uint32_t socket, uint32_t ip, uint16_t port) {
     for (size_t i = 0; i < TCP_CXT_NUM; ++i) {
         if (tcp_ctx[i].socket_id == -1) {
             tcp_ctx[i].socket_id = socket;
@@ -61,21 +64,23 @@ int tcp_bind(uint32_t socket, uint32_t ip, uint16_t port) {
 }
 
 
-int tcp_connect(uint32_t socket, struct tcp_endpoint* endpoint) {
-    return 0;
-
-}
-
-int tcp_write(uint32_t socket, uint8_t* data, size_t lenght) {
-    return 0;
-
-}
-
-int tcp_read(uint32_t socket, uint8_t* data) {
+int
+tcp_connect(uint32_t socket, struct tcp_endpoint* endpoint) {
     return 0;
 }
 
-int tcp_send(struct tcp_context* ctx, struct tcp_pkt* pkt, size_t length) {
+int
+tcp_write(uint32_t socket, uint8_t* data, size_t lenght) {
+    return 0;
+}
+
+int
+tcp_read(uint32_t socket, uint8_t* data) {
+    return 0;
+}
+
+int
+tcp_send(struct tcp_context* ctx, struct tcp_pkt* pkt, size_t length) {
     struct ip_pkt result;
     struct ip_hdr* hdr = &result.hdr;
 
@@ -90,26 +95,30 @@ int tcp_send(struct tcp_context* ctx, struct tcp_pkt* pkt, size_t length) {
     return res;
 }
 
-int tcp_recv(struct ip_pkt* recv_ip) {
+int
+tcp_recv(struct ip_pkt* recv_ip) {
     struct tcp_pkt pkt;
-    int res = ip_recv(recv_ip);
-    if (res < 0) {
-        return res;
-    }
     memcpy((void*)&pkt, (void*)recv_ip->data, recv_ip->hdr.ip_totallength - IP_HEADER_LEN);
     for (size_t i = 0; i < TCP_CXT_NUM; ++i) {
         if (tcp_ctx[i].tcp_local.port == pkt.hdr.th_dport) {
             switch (tcp_ctx[i].state) {
-                case LISTEN:
-                    tcp_ctx[i].tcp_foreign.ip = recv_ip->hdr.ip_srcaddr;
-                    tcp_ctx[i].tcp_foreign.port = pkt.hdr.th_sport;
-                    return _tcp_listen(&tcp_ctx[i], &pkt);
-                case CSTATE_CLOSED:
-                    return -1;
-                default:
-                    return -1;
+            case LISTEN:
+                tcp_ctx[i].tcp_foreign.ip = recv_ip->hdr.ip_srcaddr;
+                tcp_ctx[i].tcp_foreign.port = pkt.hdr.th_sport;
+                return _tcp_listen(&tcp_ctx[i], &pkt);
+            case CSTATE_CLOSED:
+                return -1;
+            default:
+                return -1;
             }
         }
     }
     return 0;
+}
+
+void
+tcp_init() {
+    for (size_t i = 0; i < TCP_CXT_NUM; ++i) {
+        tcp_ctx[i].socket_id = -1;
+    }
 }

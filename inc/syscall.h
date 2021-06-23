@@ -18,6 +18,9 @@ enum {
     SYS_yield,
     SYS_ipc_try_send,
     SYS_ipc_recv,
+    SYS_create_socket,
+    SYS_bind_socket,
+    SYS_listen_socket,
     NSYSCALLS
 };
 
