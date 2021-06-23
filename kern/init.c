@@ -163,7 +163,6 @@ i386_init(void) {
     net_init();
 
 
-    //ENV_CREATE(user_hello, ENV_TYPE_USER);
 #ifdef CONFIG_KSPACE
     /* Touch all you want */
     //ENV_CREATE_KERNEL_TYPE(prog_test1);
@@ -172,8 +171,6 @@ i386_init(void) {
     //ENV_CREATE_KERNEL_TYPE(prog_test4);
     //ENV_CREATE_KERNEL_TYPE(prog_test5);
     //ENV_CREATE_KERNEL_TYPE(prog_test6);
-    //
-    //ENV_CREATE(user_hello, ENV_TYPE_USER);
 #else
 
 #if LAB >= 10
