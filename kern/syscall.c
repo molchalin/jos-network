@@ -450,7 +450,7 @@ sys_bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
 
 static int
 sys_listen_socket(envid_t env, uint32_t socket) {
-    return sys_listen_socket(env, socket);
+    return listen_socket(env, socket);
 }
 
 /* Dispatches to the correct kernel function, passing the arguments. */

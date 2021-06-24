@@ -38,3 +38,22 @@ bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
     }
     return res;
 }
+
+
+int listen_socket(envid_t env, uint32_t socket) {
+    if (socket >= SOCKET_NUM) {
+        return -1;
+    }
+
+    struct socket* s = &sockets[socket];
+
+    if (s->socket_env != env) {
+        return -1;
+    }
+
+    int res = 0;
+    if (s->socket_protocol == SP_TCP) {
+        res = tcp_listen(socket);
+    }
+    return res;
+}

@@ -12,6 +12,7 @@ umain(int argc, char **argv) {
         cprintf("no socket\n");
         return;
     }
+    cprintf("socket: %d\n", socket);
     int res = 0;
     uint32_t ip = 1;
     uint16_t port = 80;
@@ -20,9 +21,11 @@ umain(int argc, char **argv) {
         cprintf("no bind\n");
         return;
     }
+    cprintf("bind\n");
     res = sys_listen_socket(env, socket);
     if (res < 0) {
         cprintf("no listen\n");
         return;
     }
+    cprintf("listen\n");
 }

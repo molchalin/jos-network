@@ -145,15 +145,15 @@ sys_ipc_recv(void *dstva, size_t size) {
 
 int
 sys_create_socket(envid_t env, int protocol) {
-    return syscall(SYS_create_socket, env, protocol, 0, 0, 0, 0, 0);
+    return syscall(SYS_create_socket, 0, env, protocol, 0, 0, 0, 0);
 }
 
 int
 sys_bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
-    return syscall(SYS_bind_socket, env, socket, ip, port, 0, 0, 0);
+    return syscall(SYS_bind_socket, 0, env, socket, ip, port, 0, 0);
 }
 
 int
 sys_listen_socket(envid_t env, uint32_t socket) {
-    return syscall(SYS_listen_socket, env, socket, 0, 0, 0, 0, 0);
+    return syscall(SYS_listen_socket, 0,  env, socket, 0, 0, 0, 0);
 }

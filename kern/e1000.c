@@ -111,6 +111,7 @@ tx_packet(char *buf, int size) {
 
 int
 rx_packet(char *buf, int size) {
+    cprintf("rx_pakcet\n");
     int next_indx = (NIC_REG(E1000_RDT) + 1) % RX_QUEUE_SIZE;
     if (!(rx_queue_desc[next_indx].status & E1000_TXD_STAT_DD)) {
         return -E_RX_EMPTY; // queue is empty

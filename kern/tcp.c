@@ -3,6 +3,7 @@
 #include <kern/ip.h>
 #include <string.h>
 
+#include <inc/stdio.h>
 // internal begin
 
 uint32_t
@@ -97,6 +98,7 @@ tcp_send(struct tcp_context* ctx, struct tcp_pkt* pkt, size_t length) {
 
 int
 tcp_recv(struct ip_pkt* recv_ip) {
+    cprintf("tcp recv enter\n");
     struct tcp_pkt pkt;
     memcpy((void*)&pkt, (void*)recv_ip->data, recv_ip->hdr.ip_totallength - IP_HEADER_LEN);
     for (size_t i = 0; i < TCP_CXT_NUM; ++i) {
@@ -114,6 +116,17 @@ tcp_recv(struct ip_pkt* recv_ip) {
         }
     }
     return 0;
+}
+
+
+int tcp_listen(uint32_t socket) {
+    for (size_t i = 0; i < TCP_CXT_NUM; ++i) {
+        if (tcp_ctx[i].socket_id == socket) {
+            tcp_ctx[i].state = LISTEN;
+            return 0;
+        }
+    }
+    return -1;
 }
 
 void
