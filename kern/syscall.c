@@ -449,8 +449,20 @@ sys_bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
 }
 
 static int
-sys_listen_socket(envid_t env, uint32_t socket) {
-    return listen_socket(env, socket);
+sys_listen_socket(envid_t envid, uint32_t socket) {
+    int res = listen_socket(envid, socket); 
+    if (res < 0) {
+        return res;
+    }
+
+    struct Env* env;
+    res = envid2env(envid, &env, 1);
+    if (res < 0) {
+        return -E_BAD_ENV;
+    }
+    env->env_status = ENV_NOT_RUNNABLE;
+
+    return 0; 
 }
 
 /* Dispatches to the correct kernel function, passing the arguments. */
