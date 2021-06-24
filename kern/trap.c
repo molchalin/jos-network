@@ -14,6 +14,7 @@
 #include <kern/picirq.h>
 #include <kern/timer.h>
 #include <kern/traceopt.h>
+#include <kern/net.h>
 
 static struct Taskstate ts;
 
@@ -304,6 +305,7 @@ trap_dispatch(struct Trapframe *tf) {
     case IRQ_OFFSET + IRQ_CLOCK:
         // LAB 5: Your code here
         // LAB 4: Your code here
+        net_serve();
         timer_for_schedule->handle_interrupts();
         sched_yield();
         return;

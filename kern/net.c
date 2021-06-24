@@ -3,9 +3,9 @@
 #include <kern/inet.h>
 #include <kern/ip.h>
 #include <kern/tcp.h>
-//#include <kern/printf.c>
+#include <inc/stdio.h>
 
-#define NET_LIMIT 42
+#define NET_LIMIT 2
 #define BUF_SIZE  1024
 
 
@@ -23,5 +23,6 @@ net_serve() {
             //cprintf("error in ip_recv\n");
             continue;
         }
+        cprintf("normal ip_recv\n");
     }
 }
