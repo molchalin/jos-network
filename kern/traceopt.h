@@ -2,7 +2,7 @@
 #define JOS_INC_TRACEOPT_H
 
 #if LAB == 8
-#define trace_traps 1
+#define trace_traps 0
 #elif !defined(trace_traps)
 #define trace_traps 0
 #endif
@@ -23,21 +23,21 @@
 
 #if LAB == 9 || LAB == 8
 #undef trace_pagefaults
-#define trace_pagefaults 1
+#define trace_pagefaults 0
 #elif !defined(trace_pagefaults)
 #define trace_pagefaults 0
 #endif
 
 #if LAB == 9 || LAB == 8 || LAB == 3
 #undef trace_envs
-#define trace_envs 1
+#define trace_envs 0
 #elif !defined(trace_envs)
 #define trace_envs 0
 #endif
 
 #if LAB == 4 || LAB == 3
 #undef trace_envs_more
-#define trace_envs_more 1
+#define trace_envs_more 0
 #elif !defined(trace_envs_more)
 #define trace_envs_more 0
 #endif
@@ -47,7 +47,7 @@
 #endif
 
 #ifndef trace_init
-#define trace_init 1
+#define trace_init 0
 #endif
 
 #endif

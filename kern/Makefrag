@@ -38,6 +38,7 @@ KERN_SRCFILES := kern/bootstrap.S \
 			kern/pci.c \
 			kern/spinlock.c \
 			kern/eth.c \
+			kern/arp.c \
 			kern/e1000.c \
             kern/ip.c \
             kern/socket.c \

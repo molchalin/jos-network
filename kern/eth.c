@@ -6,11 +6,9 @@
 #include <inc/assert.h>
 
 //52:54:00:12:34:56
-char qemu_mac[6] = {0x52, 0x54, 0x0, 0x12, 0x34, 0x56};
-
 
 int
-eth_send(struct eth_hdr* hdr, char* data, size_t len) {
+eth_send(struct eth_hdr* hdr, void* data, size_t len) {
     assert(len <= ETH_MAX_PACKET_SIZE - sizeof(struct eth_hdr));
     memcpy((void*)hdr->eth_smac, qemu_mac, sizeof(hdr->eth_smac));
 
@@ -26,7 +24,7 @@ eth_send(struct eth_hdr* hdr, char* data, size_t len) {
 
 
 int
-eth_recv(struct eth_hdr* hdr, char* data) {
+eth_recv(struct eth_hdr* hdr, void* data) {
     char buf[ETH_MAX_PACKET_SIZE + 1];
 
     int size = rx_packet(buf, sizeof(buf));
