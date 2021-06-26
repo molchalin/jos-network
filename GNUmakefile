@@ -318,7 +318,7 @@ QEMUOPTS += -bios $(OVMF_FIRMWARE)
 # QEMUOPTS += -debugcon file:$(UEFIDIR)/debug.log -global isa-debugcon.iobase=0x402
 # net
 QEMUOPTS += -net user -net nic,model=e1000
-QEMUOPTS += -net dump,file=qemu.pcap
+# QEMUOPTS += -net dump,file=qemu.pcap
 #
 QEMUOPTS += -netdev user,id=mynet0,hostfwd=tcp::8080-:80
 QEMUOPTS += -device e1000,netdev=mynet0
