@@ -37,10 +37,16 @@ struct e1000_tx_desc *tx_queue_desc;
 
 // receive buffers
 struct eth_packet_buffer rx_queue_data[RX_QUEUE_SIZE];
-struct e1000_rx_desc *rx_queue_desc;
+struct e1000_rx_desc rx_queue_desc[RX_QUEUE_SIZE];
 
 int
 e1000_attach(struct pci_func *pcif) {
+    static int enable_e1000 = 0;
+    if (enable_e1000 != 0) {
+        return 0;
+    }
+    enable_e1000 = 1;
+    
     pci_func_enable(pcif);
     nic = mmio_map_region(pcif->reg_base[0], pcif->reg_size[0]);
 
@@ -75,9 +81,10 @@ e1000_attach(struct pci_func *pcif) {
     // MTA initialized to 0b
     NIC_REG(E1000_MTA) = 0;
     // Allocate memory for the receive descriptor list & init registers
-    void *r_desc = kzalloc_region(RX_QUEUE_SIZE * sizeof(struct e1000_tx_desc));
-    rx_queue_desc = r_desc;
-    NIC_REG(E1000_RDBAL) = va2pa((uintptr_t)r_desc);
+    //void *r_desc = kzalloc_region(RX_QUEUE_SIZE * sizeof(struct e1000_tx_desc));
+    //rx_queue_desc = r_desc;
+    //NIC_REG(E1000_RDBAL) = va2pa((uintptr_t)r_desc);
+    NIC_REG(E1000_RDBAL) = (uint64_t)PADDR(&rx_queue_desc);
     NIC_REG(E1000_RDBAH) = 0;
     NIC_REG(E1000_RDLEN) = RX_QUEUE_SIZE * sizeof(struct e1000_rx_desc);
 
@@ -91,6 +98,7 @@ e1000_attach(struct pci_func *pcif) {
     }
     // enable and strip CRC
     NIC_REG(E1000_RCTL) |= E1000_RCTL_EN | E1000_RCTL_SECRC;
+    cprintf("EXIT ATTACH e1000\n");
     return 0;
 }
 
@@ -112,6 +120,8 @@ tx_packet(char *buf, int size) {
 int
 rx_packet(char *buf, int size) {
     int next_indx = (NIC_REG(E1000_RDT) + 1) % RX_QUEUE_SIZE;
+    //cprintf("next_index: %d\n", next_indx);
+    //cprintf("flags: %d\n", rx_queue_desc[next_indx].status);
     if (!(rx_queue_desc[next_indx].status & E1000_TXD_STAT_DD)) {
         return -E_RX_EMPTY; // queue is empty
     }

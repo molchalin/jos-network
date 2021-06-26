@@ -317,11 +317,12 @@ IMAGES += $(OBJDIR)/fs/fs.img
 QEMUOPTS += -bios $(OVMF_FIRMWARE)
 # QEMUOPTS += -debugcon file:$(UEFIDIR)/debug.log -global isa-debugcon.iobase=0x402
 # net
-QEMUOPTS += -net user -net nic,model=e1000
+QEMUOPTS += -net user -net nic,model=e1000,macaddr=52:54:00:12:34:56
 # QEMUOPTS += -net dump,file=qemu.pcap
 #
 QEMUOPTS += -netdev user,id=mynet0,hostfwd=tcp::8080-:80
 QEMUOPTS += -device e1000,netdev=mynet0
+QEMUOPTS += -object filter-dump,id=mynet0,netdev=mynet0,file=dump.dat
 # QEMUOPTS += -net user -net nic,model=e1000 -hostfwd tcp:$(PORT7)::7 \
 	   -redir tcp:$(PORT80)::80 -redir udp:$(PORT7)::7 -net dump,file=qemu.pcap
 # net
