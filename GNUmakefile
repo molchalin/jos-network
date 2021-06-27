@@ -321,7 +321,7 @@ QEMUOPTS += -bios $(OVMF_FIRMWARE)
 # QEMUOPTS += -net dump,file=qemu.pcap
 #
 QEMUOPTS += -netdev tap,id=mynet0,ifname=jostap,script=no,downscript=no
-QEMUOPTS += -device e1000,netdev=mynet0
+QEMUOPTS += -device e1000,netdev=mynet0,mac=52:54:00:12:34:56
 QEMUOPTS += -object filter-dump,id=mynet0,netdev=mynet0,file=dump.dat
 # QEMUOPTS += -net user -net nic,model=e1000 -hostfwd tcp:$(PORT7)::7 \
 	   -redir tcp:$(PORT80)::80 -redir udp:$(PORT7)::7 -net dump,file=qemu.pcap

@@ -32,12 +32,14 @@ struct eth_packet_buffer {
 };
 
 // transmit buffers
-struct eth_packet_buffer tx_queue_data[TX_QUEUE_SIZE];
+//struct eth_packet_buffer tx_queue_data[TX_QUEUE_SIZE];
+struct eth_packet_buffer* tx_queue_data;
 struct e1000_tx_desc *tx_queue_desc;
 
 // receive buffers
-struct eth_packet_buffer rx_queue_data[RX_QUEUE_SIZE];
-struct e1000_rx_desc rx_queue_desc[RX_QUEUE_SIZE];
+//struct eth_packet_buffer rx_queue_data[RX_QUEUE_SIZE];
+struct eth_packet_buffer *rx_queue_data;
+struct e1000_rx_desc *rx_queue_desc;
 
 int
 e1000_attach(struct pci_func *pcif) {
@@ -53,17 +55,23 @@ e1000_attach(struct pci_func *pcif) {
     // Transmit Initialization
     void *t_desc = kzalloc_region(TX_QUEUE_SIZE * sizeof(struct e1000_tx_desc));
 
+    cprintf("va2pa tdesc: %p -> %p\n", t_desc, (void*)va2pa((uintptr_t)t_desc));
     NIC_REG(E1000_TDBAL) = va2pa((uintptr_t)t_desc);
     NIC_REG(E1000_TDBAH) = 0;
     NIC_REG(E1000_TDLEN) = TX_QUEUE_SIZE * sizeof(struct e1000_tx_desc);
     tx_queue_desc = t_desc;
+    //cprintf("addr ---\n");
+    tx_queue_data = kzalloc_region(TX_QUEUE_SIZE * sizeof(struct eth_packet_buffer));
     for (int i = 0; i < TX_QUEUE_SIZE; i++) {
-        tx_queue_desc[i].addr = (uint64_t)PADDR(&tx_queue_data[i]);
+        //tx_queue_desc[i].addr = (uint64_t)PADDR(&tx_queue_data[i]);
+        //cprintf("va2pa addr: %p -> %p\n", (void*)&tx_queue_data[i], (void*)va2pa((uintptr_t)&tx_queue_data[i]));
+        tx_queue_desc[i].addr = va2pa((uintptr_t)&tx_queue_data[i]);
         // Report Status on, and mark descriptor as end of packet
         tx_queue_desc[i].cmd = (1 << 3) | (1 << 0);
         // set Descriptor Done so we can use this descriptor
         tx_queue_desc[i].status |= E1000_TXD_STAT_DD;
     }
+    //cprintf("addr ---\n");
     // initialize head and tail to 0 per documentation
     NIC_REG(E1000_TDH) = 0;
     NIC_REG(E1000_TDT) = 0;
@@ -81,18 +89,20 @@ e1000_attach(struct pci_func *pcif) {
     // MTA initialized to 0b
     NIC_REG(E1000_MTA) = 0;
     // Allocate memory for the receive descriptor list & init registers
-    //void *r_desc = kzalloc_region(RX_QUEUE_SIZE * sizeof(struct e1000_tx_desc));
-    //rx_queue_desc = r_desc;
-    //NIC_REG(E1000_RDBAL) = va2pa((uintptr_t)r_desc);
-    NIC_REG(E1000_RDBAL) = (uint64_t)PADDR(&rx_queue_desc);
+    void *r_desc = kzalloc_region(RX_QUEUE_SIZE * sizeof(struct e1000_tx_desc));
+    rx_queue_desc = r_desc;
+    NIC_REG(E1000_RDBAL) = va2pa((uintptr_t)r_desc);
+    //NIC_REG(E1000_RDBAL) = (uint64_t)PADDR(&rx_queue_desc);
     NIC_REG(E1000_RDBAH) = 0;
     NIC_REG(E1000_RDLEN) = RX_QUEUE_SIZE * sizeof(struct e1000_rx_desc);
 
     // initialize head and tail such that (tail + 1) % size = head
     NIC_REG(E1000_RDH) = 0;
     NIC_REG(E1000_RDT) = RX_QUEUE_SIZE - 1;
+    rx_queue_data = kzalloc_region(RX_QUEUE_SIZE * sizeof(struct eth_packet_buffer));
     for (int i = 0; i < RX_QUEUE_SIZE; i++) {
-        rx_queue_desc[i].addr = (uint64_t)PADDR(&rx_queue_data[i]);
+        //rx_queue_desc[i].addr = (uint64_t)PADDR(&rx_queue_data[i]);
+        rx_queue_desc[i].addr = va2pa((uintptr_t)&rx_queue_data[i]);
         // clear Descriptor Done so we know we are not allowed to read it
         rx_queue_desc[i].status &= ~E1000_RXD_STAT_DD;
     }

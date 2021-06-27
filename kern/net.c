@@ -22,8 +22,7 @@ net_serve() {
         struct ip_pkt pkt;
         int res = ip_recv(&pkt);
         if (res < 0) {
-            cprintf("error in ip_recv\n");
-            cprintf("%d\n", res);
+            //cprintf("error in ip_recv\n");
             continue;
         }
         cprintf("normal ip_recv\n");
@@ -36,10 +35,10 @@ net_serve() {
         memset(buf, 0xEE, 666);
         int res = eth_send(&hdr, &buf, 666);
         if (res < 0) {
-            cprintf("error in eth_send\n");
-            cprintf("%d\n", res);
+            //cprintf("error in eth_send\n");
+            //cprintf("%d\n", res);
             continue;
         }
-        cprintf("normal\n");
+        //cprintf("normal\n");
     }
 }
