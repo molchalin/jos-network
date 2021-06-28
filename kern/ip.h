@@ -3,6 +3,7 @@
 
 #include <inc/types.h>
 #include <kern/e1000.h>
+#include <kern/eth.h>
 
 struct ip_hdr {
     uint8_t ip_verlen;       // 4-bit IPv4 version 4-bit header length (in 32-bit words)
@@ -20,7 +21,8 @@ struct ip_hdr {
 
 #define MTU           1500 // tmp magic
 #define IP_HEADER_LEN sizeof(struct ip_hdr)
-#define IP_DATA_LEN   (MTU - IP_HEADER_LEN)
+#define ETH_HEADER_LEN sizeof(struct eth_hdr)
+#define IP_DATA_LEN   (MTU - IP_HEADER_LEN - ETH_HEADER_LEN)
 
 struct ip_pkt {
     struct ip_hdr hdr;
@@ -34,7 +36,7 @@ int ip_recv(struct ip_pkt* pkt);
 #define IP_VER 0x4
 //#define IP_HLEN 0x05
 #define IP_HLEN    (IP_HEADER_LEN / sizeof(uint8_t))
-#define IP_VER_LEN (IP_VER | IP_HLEN)
+#define IP_VER_LEN (IP_VER << 4 | IP_HLEN)
 #define IP_TTL     10
 
 #define IPH_V(hdr)  ((hdr)->ip_verlen & 0xf)

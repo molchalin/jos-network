@@ -2,6 +2,7 @@
 #include <inc/string.h>
 #include <kern/inet.h>
 #include <inc/error.h>
+#include <kern/eth.h>
 #include <kern/tcp.h>
 
 uint16_t packet_id = 0;
@@ -46,10 +47,15 @@ ip_send(struct ip_pkt* pkt, uint16_t length) {
     hdr->ip_totallength = htons((length + IP_HEADER_LEN) / sizeof(uint8_t));
     hdr->ip_id = htons(id);
     hdr->ip_offset = 0; // TODO fragmentation
+    hdr->ip_protocol = htons(17);
     hdr->ip_ttl = IP_TTL;
 
     hdr->ip_checksum = ip_checksum((void*)pkt, IP_HEADER_LEN);
-    return tx_packet((void*)pkt, sizeof(*pkt));
+    struct eth_hdr e_hdr;
+    e_hdr.eth_type = 0x0008;
+    char hard_code[6] = {0x3a,0xbe, 0x6d, 0xa0, 0xaf, 0x00};
+    memcpy(e_hdr.eth_dmac, hard_code, 6);
+    return eth_send(&e_hdr, (void*)pkt, sizeof(struct ip_hdr)+length);
 }
 
 int
