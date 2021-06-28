@@ -127,7 +127,7 @@ int rx_packet(char *buffer)
 	//status to recieve
 	if(!(rx_desc_table[head].status & 0x1))
 	{
-	  cprintf("no data received");
+	  //cprintf("no data received");
 	  return -1;
 	}
 

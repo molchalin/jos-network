@@ -6,6 +6,7 @@
 #include <kern/tcp.h>
 #include <inc/stdio.h>
 #include <inc/string.h>
+#include <kern/udp.h>
 
 #define NET_LIMIT 2
 #define BUF_SIZE  1024
@@ -29,16 +30,14 @@ net_serve() {
     }
 
     for (size_t i = 0; i < NET_LIMIT; ++i) {
-        struct eth_hdr hdr;
-        memset(hdr.eth_dmac, 0xFF, 6);
         char buf[666];
         memset(buf, 0xEE, 666);
-        int res = eth_send(&hdr, &buf, 666);
+        int res = udp_send(buf, 666);
         if (res < 0) {
             //cprintf("error in eth_send\n");
             //cprintf("%d\n", res);
             continue;
         }
-        //cprintf("normal\n");
+        cprintf("normal udp\n");
     }
 }
