@@ -40,7 +40,8 @@ bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
 }
 
 
-int listen_socket(envid_t env, uint32_t socket) {
+int
+listen_socket(envid_t env, uint32_t socket) {
     if (socket >= SOCKET_NUM) {
         return -1;
     }

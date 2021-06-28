@@ -19,10 +19,10 @@ struct ip_hdr {
 } __attribute__((packed));
 
 
-#define MTU           1500 // tmp magic
-#define IP_HEADER_LEN sizeof(struct ip_hdr)
+#define MTU            1500 // tmp magic
+#define IP_HEADER_LEN  sizeof(struct ip_hdr)
 #define ETH_HEADER_LEN sizeof(struct eth_hdr)
-#define IP_DATA_LEN   (MTU - IP_HEADER_LEN - ETH_HEADER_LEN)
+#define IP_DATA_LEN    (MTU - IP_HEADER_LEN - ETH_HEADER_LEN)
 
 struct ip_pkt {
     struct ip_hdr hdr;

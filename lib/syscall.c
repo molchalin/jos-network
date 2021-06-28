@@ -155,5 +155,5 @@ sys_bind_socket(envid_t env, uint32_t socket, uint32_t ip, uint16_t port) {
 
 int
 sys_listen_socket(envid_t env, uint32_t socket) {
-    return syscall(SYS_listen_socket, 0,  env, socket, 0, 0, 0, 0);
+    return syscall(SYS_listen_socket, 0, env, socket, 0, 0, 0, 0);
 }

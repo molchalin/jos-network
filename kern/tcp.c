@@ -119,7 +119,8 @@ tcp_recv(struct ip_pkt* recv_ip) {
 }
 
 
-int tcp_listen(uint32_t socket) {
+int
+tcp_listen(uint32_t socket) {
     for (size_t i = 0; i < TCP_CXT_NUM; ++i) {
         if (tcp_ctx[i].socket_id == socket) {
             tcp_ctx[i].state = LISTEN;

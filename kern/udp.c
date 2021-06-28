@@ -1,7 +1,8 @@
 #include <kern/udp.h>
 #include <string.h>
 
-int udp_send(void* data, int length) {
+int
+udp_send(void* data, int length) {
     struct udp_pkt pkt;
     struct udp_hdr* hdr = &pkt.hdr;
     hdr->src_port = 0;
@@ -13,4 +14,3 @@ int udp_send(void* data, int length) {
     memcpy((void*)result.data, (void*)&pkt, length + sizeof(struct udp_hdr));
     return ip_send(&result, length + sizeof(struct udp_hdr));
 }
-

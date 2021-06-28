@@ -53,9 +53,9 @@ ip_send(struct ip_pkt* pkt, uint16_t length) {
     hdr->ip_checksum = ip_checksum((void*)pkt, IP_HEADER_LEN);
     struct eth_hdr e_hdr;
     e_hdr.eth_type = 0x0008;
-    char hard_code[6] = {0x3a,0xbe, 0x6d, 0xa0, 0xaf, 0x00};
+    char hard_code[6] = {0x3a, 0xbe, 0x6d, 0xa0, 0xaf, 0x00};
     memcpy(e_hdr.eth_dmac, hard_code, 6);
-    return eth_send(&e_hdr, (void*)pkt, sizeof(struct ip_hdr)+length);
+    return eth_send(&e_hdr, (void*)pkt, sizeof(struct ip_hdr) + length);
 }
 
 int

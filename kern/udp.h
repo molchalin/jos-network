@@ -12,7 +12,7 @@ struct udp_hdr {
     uint16_t dst_port;
     uint16_t length;
     uint16_t checksum;
-}__attribute__((packed));
+} __attribute__((packed));
 
 
 struct udp_pkt {
