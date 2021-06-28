@@ -50,6 +50,8 @@ ip_send(struct ip_pkt* pkt, uint16_t length) {
     hdr->ip_offset = 0; // TODO fragmentation
     hdr->ip_protocol = 17;
     hdr->ip_ttl = IP_TTL;
+    hdr->ip_destaddr = JHTONL(3232249857);
+    hdr->ip_srcaddr = JHTONL(3232249858);
 
     hdr->ip_checksum = ip_checksum((void*)pkt, IP_HEADER_LEN);
     struct eth_hdr e_hdr;
