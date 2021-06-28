@@ -1,4 +1,5 @@
 #include <kern/udp.h>
+#include <kern/inet.h>
 #include <string.h>
 
 int

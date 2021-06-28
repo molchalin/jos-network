@@ -30,9 +30,9 @@ net_serve() {
     }
 
     for (size_t i = 0; i < NET_LIMIT; ++i) {
-        char buf[666];
-        memset(buf, 0xEE, 666);
-        int res = udp_send(buf, 666);
+        char buf[6];
+        memset(buf, 0xEE, 6);
+        int res = udp_send(buf, 6);
         if (res < 0) {
             //cprintf("error in eth_send\n");
             //cprintf("%d\n", res);

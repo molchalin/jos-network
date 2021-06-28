@@ -4,6 +4,7 @@
 #include <inc/error.h>
 #include <kern/eth.h>
 #include <kern/tcp.h>
+#include <inc/stdio.h>
 
 uint16_t packet_id = 0;
 
@@ -44,10 +45,10 @@ ip_send(struct ip_pkt* pkt, uint16_t length) {
     struct ip_hdr* hdr = &pkt->hdr;
     hdr->ip_verlen = IP_VER_LEN;
     hdr->ip_tos = 0;
-    hdr->ip_totallength = htons((length + IP_HEADER_LEN) / sizeof(uint8_t));
-    hdr->ip_id = htons(id);
+    hdr->ip_totallength = length + IP_HEADER_LEN;
+    hdr->ip_id = id;
     hdr->ip_offset = 0; // TODO fragmentation
-    hdr->ip_protocol = htons(17);
+    hdr->ip_protocol = 17;
     hdr->ip_ttl = IP_TTL;
 
     hdr->ip_checksum = ip_checksum((void*)pkt, IP_HEADER_LEN);
