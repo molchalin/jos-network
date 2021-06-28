@@ -7,8 +7,8 @@ udp_send(void* data, int length) {
     struct udp_pkt pkt;
     struct udp_hdr* hdr = &pkt.hdr;
     hdr->src_port = 0;
-    hdr->dst_port = 1234;
-    hdr->length = length + sizeof(struct udp_hdr);
+    hdr->dst_port = JHTONS(1234);
+    hdr->length = JHTONS(length + sizeof(struct udp_hdr));
     hdr->checksum = 0;
     memcpy((void*)pkt.data, data, length);
     struct ip_pkt result;

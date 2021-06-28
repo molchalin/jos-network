@@ -45,7 +45,7 @@ ip_send(struct ip_pkt* pkt, uint16_t length) {
     struct ip_hdr* hdr = &pkt->hdr;
     hdr->ip_verlen = IP_VER_LEN;
     hdr->ip_tos = 0;
-    hdr->ip_totallength = length + IP_HEADER_LEN;
+    hdr->ip_totallength = JHTONS(length + IP_HEADER_LEN);
     hdr->ip_id = id;
     hdr->ip_offset = 0; // TODO fragmentation
     hdr->ip_protocol = 17;
