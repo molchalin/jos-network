@@ -5,6 +5,7 @@
 #include <kern/eth.h>
 #include <kern/tcp.h>
 #include <inc/stdio.h>
+#include <kern/udp.h>
 
 uint16_t packet_id = 0;
 
@@ -48,7 +49,7 @@ ip_send(struct ip_pkt* pkt, uint16_t length) {
     hdr->ip_totallength = JHTONS(length + IP_HEADER_LEN);
     hdr->ip_id = id;
     hdr->ip_offset = 0; // TODO fragmentation
-    hdr->ip_protocol = 17;
+    //hdr->ip_protocol = 17;
     hdr->ip_ttl = IP_TTL;
     hdr->ip_destaddr = JHTONL(3232249857);
     hdr->ip_srcaddr = JHTONL(3232249858);
@@ -79,6 +80,8 @@ ip_recv(struct ip_pkt* pkt) {
     }
     if (hdr->ip_protocol == IP_PROTO_TCP) {
         tcp_recv(pkt);
+    } else  if (hdr->ip_protocol ==  IP_PROTO_UDP) {
+        udp_recv(pkt);
     }
     return 0;
 }

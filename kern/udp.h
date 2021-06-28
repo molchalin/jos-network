@@ -22,6 +22,7 @@ struct udp_pkt {
 
 
 int udp_send(void* data, int length);
+int udp_recv(struct ip_pkt* pkt);
 
 
 #endif /* !JOS_KERN_UDP_H */
