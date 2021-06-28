@@ -54,7 +54,8 @@ ip_send(struct ip_pkt* pkt, uint16_t length) {
 
 int
 ip_recv(struct ip_pkt* pkt) {
-    int res = rx_packet((void*)pkt, sizeof(*pkt));
+    //int res = rx_packet((void*)pkt, sizeof(*pkt));
+    int res = rx_packet((void*)pkt);
     if (res < 0) {
         return res;
     }

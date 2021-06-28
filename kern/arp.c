@@ -6,6 +6,7 @@
 #include <kern/inet.h>
 
 #define MY_IP 0xA000004
+#define ETH_MAX_PACKET_SIZE 1500
 
 static struct arp_cache_entry arp_cache[ARP_CACHE_LEN];
 
